@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+twilio
+
+#for database connection
+aiomysql
+sqlalchemy
+mysql-connector-python

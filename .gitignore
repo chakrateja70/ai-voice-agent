@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# Environment variables
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Others
+*.sqlite3
+*.db
+*.bak
+*.swp
+*.swo
+.idea/
+*.tmp
+*.cache

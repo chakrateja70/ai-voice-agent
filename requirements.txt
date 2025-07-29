@@ -2,8 +2,21 @@ fastapi
 uvicorn
 python-dotenv
 twilio
+google-generativeai
+websockets
 
 #for database connection
 aiomysql
 sqlalchemy
 mysql-connector-python
+
+# Additional dependencies
+pydantic
+requests
+aiofiles
+python-multipart
+
+# Optional: Lightweight speech processing alternatives
+# openai-whisper  # Uncomment if you want to use Whisper for STT
+# gTTS  # Uncomment if you want to use Google Text-to-Speech
+# speechrecognition  # Uncomment for basic speech recognition

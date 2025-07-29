@@ -1,160 +1,97 @@
-# AI Voice Calling Agent with Seamless M4T
+# AI Voice Calling Agent
 
-A FastAPI-based AI voice calling agent that uses Twilio for voice calls, Google Gemini for conversation handling, and Meta's Seamless M4T v2 for advanced speech-to-text and text-to-speech processing.
+## 1. Project Overview
 
-## Features
+AI Voice Calling Agent is a FastAPI-based backend application that enables automated voice calls using Twilio for telephony and Google Gemini LLM for conversational AI. The system can initiate outgoing calls, conduct interactive conversations with users, and log call details and transcripts in a MySQL database. It is designed for use cases such as customer feedback, sales inquiries, appointment reminders, surveys, and general support.
 
-- 🎙️ **Advanced STT/TTS**: Meta's Seamless M4T v2 for high-quality speech processing
-- 🤖 **AI-powered conversations**: Google Gemini for intelligent responses  
-- 📞 **Voice calling**: Twilio integration for phone calls
-- 🌍 **Multilingual support**: Seamless M4T supports multiple languages
-- 📊 **Call logging**: Database integration for call history and transcripts
-- ⚡ **Real-time processing**: WebSocket support for live audio streaming
-- 🔧 **GPU acceleration**: CUDA support for faster processing
+## 2. Problem Statement
 
-## Prerequisites
+Businesses often need to automate outbound voice calls for surveys, feedback, reminders, or sales, but traditional IVR systems are rigid and lack conversational intelligence. This project solves that by combining Twilio's reliable telephony with a powerful LLM (Google Gemini) to create a flexible, natural, and context-aware voice agent that can handle real conversations, log interactions, and adapt to various business needs.
 
+## 3. Architecture
+
+- **FastAPI**: Serves as the web framework for API endpoints.
+- **Twilio**: Handles telephony (outgoing calls, speech-to-text, text-to-speech).
+- **Google Gemini LLM**: Provides conversational intelligence for dynamic, context-aware responses.
+- **MySQL**: Stores call logs and conversation transcripts.
+- **SQLAlchemy (Async)**: ORM for database operations.
+- **ngrok**: Used for exposing local server to the internet for Twilio webhooks during development.
+
+### High-Level Flow
+
+1. **API Request**: Client requests an outgoing call via `/outgoing-call` endpoint.
+2. **Call Initiation**: The backend uses Twilio to place the call and sets up webhooks for call events.
+3. **Conversation**: User interacts with the AI agent (powered by Gemini LLM) via phone. The agent responds contextually.
+4. **Logging**: All call details and conversation messages are logged in the database.
+5. **Completion**: The call ends based on user input or conversation logic, and the status is updated.
+
+## 4. Setup and Installation
+
+### Prerequisites
 - Python 3.8+
-- Twilio account with phone number
-- Google AI API key
-- MySQL database (optional)
-- **GPU recommended**: NVIDIA GPU with CUDA support for optimal performance
-- **RAM**: At least 8GB RAM (16GB recommended for GPU usage)
-- **Storage**: ~5GB for model files
+- MySQL database
+- Twilio account (for telephony)
+- Google Gemini API key
+- ngrok (for local development)
 
-## Setup
+### Installation Steps
 
-1. **Install dependencies**
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/chakrateja70/ai-voice-agent.git
+   cd ai-voice-agent
+   ```
+2. **Create and activate a virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+3. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
-
-   Or run the automated setup:
+4. **Configure environment variables**
+   - Create a `.env` file in the project root (see below for required variables).
+5. **Set up the MySQL database**
+   - Create a database and user matching your `.env` settings.
+   - Run migrations or let SQLAlchemy create tables on first run.
+6. **Run the application**
    ```bash
-   python setup.py
+   uvicorn main:app --reload
    ```
-
-2. **Environment variables**
-   Create a `.env` file in the root directory:
-   ```env
-   TWILIO_ACCOUNT_SID=your_twilio_account_sid
-   TWILIO_AUTH_TOKEN=your_twilio_auth_token
-   TWILIO_PHONE_NUMBER=your_twilio_phone_number
-   GEMINI_API_KEY=your_google_ai_api_key
-   WEBHOOK_BASE_URL=your_ngrok_or_server_url
-   
-   # Database (optional)
-   DATABASE_URL=mysql+aiomysql://user:password@localhost/dbname
-   ```
-
-3. **Run the application**
+7. **Expose your local server to the internet (for Twilio webhooks)**
    ```bash
-   python main.py
+   ./ngrok http 8000
    ```
 
-   The API will be available at `http://localhost:8000`
+## 5. .env Configuration
 
-## Seamless M4T Integration
+Create a `.env` file in the project root with the following variables:
 
-This application now uses Meta's Seamless M4T v2 model for:
+```ini
+# Twilio Credentials
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_phone_number
 
-### Speech-to-Text (STT)
-- High-quality transcription in multiple languages
-- Real-time processing capability
-- Better accuracy than traditional ASR systems
+# Google Gemini API Key
+GEMINI_API_KEY=your_gemini_api_key
 
-### Text-to-Speech (TTS)  
-- Natural-sounding voice synthesis
-- Multilingual voice generation
-- Consistent voice quality
+# MySQL Database
+MYSQL_USER=your_mysql_user
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DATABASE=ai_voice_agent
 
-### Configuration
-Seamless M4T settings can be configured in `app/config/seamless_config.py`:
-
-```python
-# Model settings
-SEAMLESS_MODEL_NAME = "facebook/seamless-m4t-v2-large"
-SEAMLESS_DEVICE = "cuda"  # or "cpu"
-
-# Audio settings
-AUDIO_SAMPLE_RATE = 16000
-DEFAULT_SRC_LANG = "eng"  # English
-DEFAULT_TGT_LANG = "eng"  # English
+# Webhook Base URL (e.g., your ngrok URL, no trailing slash)
+WEBHOOK_BASE_URL=https://your-ngrok-url.ngrok-free.app
 ```
 
-## API Endpoints
+## Logging
 
-- `POST /outgoing-call` - Initiate an outgoing call
-- `POST /call-webhook/{call_log_id}` - Twilio voice webhook handler
-- `POST /call-response/{call_log_id}` - Handle call responses
-- `WS /ws/audio/{call_log_id}` - WebSocket for real-time audio streaming
-- `POST /media-webhook/{call_log_id}` - Handle Twilio media streams
+Logs are saved to the `logs/ai_voice_agent.log` file and also output to the console.
 
-## Usage
+## License
 
-To make an outgoing call:
-```bash
-curl -X POST "http://localhost:8000/outgoing-call" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "phone_number": "+1234567890",
-       "conversation_type": "customer_feedback",
-       "greeting": "Hello! This is an AI assistant calling for feedback."
-     }'
-```
-
-## Performance Notes
-
-### GPU Usage
-- **Recommended**: NVIDIA GPU with 8GB+ VRAM
-- **Minimum**: 4GB VRAM for basic functionality
-- CPU-only mode available but significantly slower
-
-### Model Loading
-- First startup may take 2-5 minutes to download model files (~5GB)
-- Subsequent startups are faster as models are cached locally
-- Models are stored in `~/.cache/huggingface/transformers/`
-
-### Audio Processing
-- Real-time STT processing: ~100-500ms latency
-- TTS generation: ~200-1000ms depending on text length
-- WebSocket streaming for minimal latency
-
-## Troubleshooting
-
-### CUDA Issues
-```bash
-# Check CUDA availability
-python -c "import torch; print(torch.cuda.is_available())"
-
-# If CUDA is not available, the system will fall back to CPU
-```
-
-### Memory Issues
-- Reduce model size by using `facebook/seamless-m4t-medium` instead
-- Close other applications to free up RAM/VRAM
-- Use CPU mode if GPU memory is insufficient
-
-### Audio Quality
-- Ensure audio sample rate is 16kHz for best results
-- Use high-quality microphones for better STT accuracy
-- Check network connectivity for real-time processing
-
-## Architecture
-
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Twilio Call   │    │   FastAPI App    │    │  Seamless M4T   │
-│                 │◄──►│                  │◄──►│                 │
-│  - Voice Input  │    │  - Conversation  │    │  - STT/TTS      │
-│  - Audio Output │    │  - WebSockets    │    │  - Multilingual │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌──────────────────┐
-                       │   Google Gemini   │
-                       │                   │
-                       │  - LLM Processing │
-                       │  - Conversation   │
-                       └──────────────────┘
-```
+MIT (or specify your license) 

@@ -25,8 +25,6 @@ class LLMService:
         
         logger.info("Gemini LLM service initialized successfully")
     
-    # Removed unused functions: analyze_user_response, generate_bot_response, generate_greeting_followup
-
     def generate_optimized_bot_response(self, conversation_type: str, user_message: str, conversation_history: list, turn_count: int) -> Dict[str, Any]:
         """
         OPTIMIZED: Generate bot response with analysis in a single LLM call for faster response times

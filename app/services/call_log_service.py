@@ -118,5 +118,3 @@ class CallLogService:
         except Exception as e:
             logger.error(f"Failed to get call transcripts: {str(e)}")
             return []
-    
-    # Removed unused functions: get_recent_calls, get_call_by_sid

@@ -3,27 +3,10 @@ uvicorn
 python-dotenv
 twilio
 google-generativeai
-websockets
-
-#for database connection
-aiomysql
 sqlalchemy
+aiomysql
 mysql-connector-python
-cryptography
-
-# Additional dependencies
 pydantic
 requests
-aiofiles
 python-multipart
-
-# AI/ML dependencies for Seamless M4T
-transformers
 torch
-torchaudio
-datasets
-librosa
-soundfile
-numpy
-scipy
-sentencepiece

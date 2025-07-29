@@ -1,6 +1,7 @@
 import os
 import logging
 from dotenv import load_dotenv
+import traceback
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from fastapi.responses import Response
@@ -88,7 +89,6 @@ async def handle_call_webhook(
         
     except Exception as e:
         logger.error(f"Webhook error for call {call_log_id}: {e}")
-        import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
         
         error_twiml = f"""<?xml version="1.0" encoding="UTF-8"?>

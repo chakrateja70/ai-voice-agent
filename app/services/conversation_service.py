@@ -264,7 +264,6 @@ class ConversationService:
         except Exception as e:
             logger.error(f"Error handling user response: {str(e)}")
             logger.error(f"Error type: {type(e)}")
-            import traceback
             logger.error(f"Traceback: {traceback.format_exc()}")
             return self._generate_error_twiml("Sorry, I encountered an error")
     

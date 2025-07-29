@@ -2,13 +2,17 @@
 
 ## 1. Project Overview
 
-AI Voice Calling Agent is a FastAPI-based backend application that enables automated voice calls using Twilio for telephony and Google Gemini LLM for conversational AI. The system can initiate outgoing calls, conduct interactive conversations with users, and log call details and transcripts in a MySQL database. It is designed for use cases such as customer feedback, sales inquiries, appointment reminders, surveys, and general support.
+This project is all about building a smart voice-calling system that can make calls automatically and talk to people just like a human would. It uses Twilio to handle phone calls and Google Gemini (a powerful AI model) to understand and respond to conversations.
 
-## 2. Problem Statement
+The system can call users, have a back-and-forth conversation with them, and then save the details of the call—including what was said—into a MySQL database. It’s useful for things like:
 
-Businesses often need to automate outbound voice calls for surveys, feedback, reminders, or sales, but traditional IVR systems are rigid and lack conversational intelligence. This project solves that by combining Twilio's reliable telephony with a powerful LLM (Google Gemini) to create a flexible, natural, and context-aware voice agent that can handle real conversations, log interactions, and adapt to various business needs.
+- Collecting customer feedback  
+- Conducting automated interviews  
+- Sending appointment reminders  
+- Running surveys  
+- Offering basic support over the phone  
 
-## 3. Architecture
+## 2. Architecture
 
 - **FastAPI**: Serves as the web framework for API endpoints.
 - **Twilio**: Handles telephony (outgoing calls, speech-to-text, text-to-speech).
@@ -25,7 +29,7 @@ Businesses often need to automate outbound voice calls for surveys, feedback, re
 4. **Logging**: All call details and conversation messages are logged in the database.
 5. **Completion**: The call ends based on user input or conversation logic, and the status is updated.
 
-## 4. Setup and Installation
+## 3. Setup and Installation
 
 ### Prerequisites
 - Python 3.8+
@@ -54,7 +58,11 @@ Businesses often need to automate outbound voice calls for surveys, feedback, re
    - Create a `.env` file in the project root (see below for required variables).
 5. **Set up the MySQL database**
    - Create a database and user matching your `.env` settings.
-   - Run migrations or let SQLAlchemy create tables on first run.
+   - Run the provided `setup_db.sql` script in your MySQL client (replace placeholders with your actual `.env` values):
+     ```bash
+     mysql -u root -p < setup_db.sql
+     ```
+   - This will create the database and user. Tables will be created automatically on first run by SQLAlchemy.
 6. **Run the application**
    ```bash
    uvicorn main:app --reload
@@ -63,28 +71,30 @@ Businesses often need to automate outbound voice calls for surveys, feedback, re
    ```bash
    ./ngrok http 8000
    ```
+   - After running this command, ngrok will provide a public URL (e.g., `https://xxxx-xxxx-xxxx.ngrok-free.app`).
+   - Copy this URL and update the `WEBHOOK_BASE_URL` variable in your `.env` file:
+     ```ini
+     WEBHOOK_BASE_URL=https://xxxx-xxxx-xxxx.ngrok-free.app
+     ```
+   - Also, use this URL as the base for your webhook endpoints in the Twilio Console (under Voice > Webhooks) to ensure Twilio can reach your local FastAPI server.
 
-## 5. .env Configuration
+## 4. .env Configuration
 
 Create a `.env` file in the project root with the following variables:
 
-```ini
-# Twilio Credentials
-TWILIO_ACCOUNT_SID=your_twilio_account_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_phone_number
-
-# Google Gemini API Key
-GEMINI_API_KEY=your_gemini_api_key
-
-# MySQL Database
-MYSQL_USER=your_mysql_user
-MYSQL_PASSWORD=your_mysql_password
+```env
+MYSQL_USER=username
+MYSQL_PASSWORD=your_password
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
-MYSQL_DATABASE=ai_voice_agent
+MYSQL_DATABASE=ai_voice_calling_agent
 
-# Webhook Base URL (e.g., your ngrok URL, no trailing slash)
+GEMINI_API_KEY=your_gemini_api_key
+
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_number
+
 WEBHOOK_BASE_URL=https://your-ngrok-url.ngrok-free.app
 ```
 
@@ -92,6 +102,3 @@ WEBHOOK_BASE_URL=https://your-ngrok-url.ngrok-free.app
 
 Logs are saved to the `logs/ai_voice_agent.log` file and also output to the console.
 
-## License
-
-MIT (or specify your license) 

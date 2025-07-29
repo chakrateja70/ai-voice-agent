@@ -9,6 +9,7 @@ websockets
 aiomysql
 sqlalchemy
 mysql-connector-python
+cryptography
 
 # Additional dependencies
 pydantic
@@ -16,7 +17,13 @@ requests
 aiofiles
 python-multipart
 
-# Optional: Lightweight speech processing alternatives
-# openai-whisper  # Uncomment if you want to use Whisper for STT
-# gTTS  # Uncomment if you want to use Google Text-to-Speech
-# speechrecognition  # Uncomment for basic speech recognition
+# AI/ML dependencies for Seamless M4T
+transformers
+torch
+torchaudio
+datasets
+librosa
+soundfile
+numpy
+scipy
+sentencepiece

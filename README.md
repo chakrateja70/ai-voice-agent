@@ -14,6 +14,8 @@ The system can call users, have a back-and-forth conversation with them, and the
 
 ## 2. Architecture
 
+For a detailed architecture with component, sequence, and ERD diagrams, see `docs/ARCHITECTURE.md`.
+
 - **FastAPI**: Serves as the web framework for API endpoints.
 - **Twilio**: Handles telephony (outgoing calls, speech-to-text, text-to-speech).
 - **Google Gemini LLM**: Provides conversational intelligence for dynamic, context-aware responses.
@@ -77,6 +79,7 @@ The system can call users, have a back-and-forth conversation with them, and the
      WEBHOOK_BASE_URL=https://xxxx-xxxx-xxxx.ngrok-free.app
      ```
    - Also, use this URL as the base for your webhook endpoints in the Twilio Console (under Voice > Webhooks) to ensure Twilio can reach your local FastAPI server.
+   url: https://console.twilio.com/us1/develop/phone-numbers/manage/incoming/PN43261061e53122bc09c61c92cfeb3ddd/configure
 
 ## 4. .env Configuration
 
